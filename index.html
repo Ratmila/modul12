@@ -1,0 +1,90 @@
+<?php
+$example_persons_array = [
+    [
+        'fullname' => 'Иванов Иван Иванович',
+        'job' => 'tester',
+    ],
+    [
+        'fullname' => 'Степанова Наталья Степановна',
+        'job' => 'frontend-developer',
+    ],
+    [
+        'fullname' => 'Пащенко Владимир Александрович',
+        'job' => 'analyst',
+    ],
+    [
+        'fullname' => 'Громов Александр Иванович',
+        'job' => 'fullstack-developer',
+    ],
+    [
+        'fullname' => 'Славин Семён Сергеевич',
+        'job' => 'analyst',
+    ],
+    [
+        'fullname' => 'Цой Владимир Антонович',
+        'job' => 'frontend-developer',
+    ],
+    [
+        'fullname' => 'Быстрая Юлия Сергеевна',
+        'job' => 'PR-manager',
+    ],
+    [
+        'fullname' => 'Шматко Антонина Сергеевна',
+        'job' => 'HR-manager',
+    ],
+    [
+        'fullname' => 'аль-Хорезми Мухаммад ибн-Муса',
+        'job' => 'analyst',
+    ],
+    [
+        'fullname' => 'Бардо Жаклин Фёдоровна',
+        'job' => 'android-developer',
+    ],
+    [
+        'fullname' => 'Шварцнегер Арнольд Густавович',
+        'job' => 'babysitter',
+    ],
+];
+
+/*getPartsFromFullname - Функция разбора ФИО на 3 разных состовляющие*/ 
+function getPartsFromFullname($string)
+{
+    $arr = explode(' ', $string);
+    return ['surname' => $arr['0'], 'name' => $arr['1'], 'patronomyc' => $arr['2']];
+    echo $arr[0];
+    echo $arr[1];
+    echo $arr[2];
+}
+
+/* getFullnameFromParts - функция конкатинации фамилии имени и отчества*/
+function getFullnameFromParts($surname, $name, $patronomyc)
+{
+    return $surname . ' ' . $name . ' ' . $patronomyc;
+}
+
+
+/*getShortName - функция сокращения фамилии до 1 символа. Имеет формат типа: "Петр П"*/
+function getShortName($string)
+{
+    $arr = getPartsFromFullname($string);
+    return $arr['name'] . ' ' . mb_substr($arr['surname'], 0, 1) . '.';
+}
+
+/*getGenderFromName - функция склейки ФИО + определения пола по признакам ( Если опознан мужчина, то функция вернет 1, если женщина - вернет -1, если невозможно определить, то ноль*/
+function getGenderFromName($string)
+{
+
+    $arr = getPartsFromFullname($string);
+    $unknown = 0;
+    $woman = -1;
+    $man = 1;
+    
+    if (mb_substr($arr['surname'], -2) === 'ва') && (mb_substr($arr['name'], -1) === 'а') && (mb_substr($arr['patronomyc'], -3) === 'вна') {
+            return $woman;
+    }
+    elseif (mb_substr($arr['surname'], -1) === 'в') && (mb_substr($arr['name'], -1) === 'й' || mb_substr($arr['name'], -1) === 'н') && (mb_substr($arr['patronomyc'], -2) === 'ич') {
+        return $man;
+    } else {
+       return $unknown;
+}
+?>
